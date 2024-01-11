@@ -1,0 +1,81 @@
+﻿@model RECSALUD.Models.DATOSPACIENTE
+@{
+	ViewBag.Title = "MODIFICAR DATOS";
+	Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+@using (Html.BeginForm())
+{
+	@Html.AntiForgeryToken()
+	@Html.ValidationSummary(true, "", new { @class = "text-danger" })
+	@Html.HiddenFor(model => model.documentop)
+	<br />
+	<br />
+	<div class="container" style="width:100%;background-color:rgba(208, 211, 212, .8);border-radius:50px">
+		<div class="card">
+			<div class="card-header" style="text-align:center;background-color:#1ABC9C;color:white;border-radius:20px"> <h3>MODIFICAR DATOS</h3></div>
+			<div class="card-body">
+				<br />
+				<div class="row">
+					<div class="col-md-4">
+						@Html.LabelFor(model => model.tipodoc, "TIPO DOCUMENTO", htmlAttributes: new { @class = "control-label" })
+						@Html.DropDownList("tipodoc", null, htmlAttributes: new { @class = "form-control" })
+						@Html.ValidationMessageFor(model => model.tipodoc, "", new { @class = "text-danger" })
+					</div>
+					<div class="col-md-4">
+						@Html.LabelFor(model => model.nombre, "NOMBRE", htmlAttributes: new { @class = "control-label" })
+						@Html.EditorFor(model => model.nombre, new { htmlAttributes = new { @class = "form-control" } })
+						@Html.ValidationMessageFor(model => model.nombre, "", new { @class = "text-danger" })
+					</div>
+					<div class="col-md-4">
+						@Html.LabelFor(model => model.apellido, "APELLIDO", htmlAttributes: new { @class = "control-label " })
+						@Html.EditorFor(model => model.apellido, new { htmlAttributes = new { @class = "form-control" } })
+						@Html.ValidationMessageFor(model => model.apellido, "", new { @class = "text-danger" })
+					</div>
+				</div>
+				<br />
+				<div class="row">
+					<div class="col-md-4">
+						@Html.LabelFor(model => model.telefono1, "TELEFONO1", htmlAttributes: new { @class = "control-label " })
+						@Html.EditorFor(model => model.telefono1, new { htmlAttributes = new { @class = "form-control" } })
+						@Html.ValidationMessageFor(model => model.telefono1, "", new { @class = "text-danger" })
+					</div>
+					<div class="col-md-4">
+						@Html.LabelFor(model => model.telefono2, "TELEFONO2", htmlAttributes: new { @class = "control-label" })
+						@Html.EditorFor(model => model.telefono2, new { htmlAttributes = new { @class = "form-control" } })
+						@Html.ValidationMessageFor(model => model.telefono2, "", new { @class = "text-danger" })
+					</div>
+					<div class="col-md-4">
+						@Html.LabelFor(model => model.direccion, "DIRECCION", htmlAttributes: new { @class = "control-label" })
+						@Html.EditorFor(model => model.direccion, new { htmlAttributes = new { @class = "form-control" } })
+						@Html.ValidationMessageFor(model => model.direccion, "", new { @class = "text-danger" })
+					</div>
+				</div>
+				<br />
+				<div class="row">
+					<div class="col-md-4">
+						@Html.LabelFor(model => model.entidad, "ENTIDAD", htmlAttributes: new { @class = "control-label" })
+						@Html.EditorFor(model => model.entidad, new { htmlAttributes = new { @class = "form-control" } })
+						@Html.ValidationMessageFor(model => model.entidad, "", new { @class = "text-danger" })
+					</div>
+					<div class="col-md-4">
+						@Html.LabelFor(model => model.correo, "CORREO", htmlAttributes: new { @class = "control-label" })
+						@Html.EditorFor(model => model.correo, new { htmlAttributes = new { @class = "form-control" } })
+						@Html.ValidationMessageFor(model => model.correo, "", new { @class = "text-danger" })
+					</div>
+				</div>
+				<br />
+				<br />
+				<div class="row">
+					<div class="col-md-4">
+						<input type="submit" value="GUARDAR" class="btn btn-info" />&nbsp;
+						<a href="~/DATOSPACIENTEs/Index" class=" btn btn-danger">CANCELAR</a>
+					</div>
+				</div>
+			</div>
+		</div>
+		<br />
+		<br />
+	</div>
+}

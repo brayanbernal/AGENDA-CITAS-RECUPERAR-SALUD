@@ -1,0 +1,211 @@
+﻿@model IEnumerable<RECSALUD.Models.AGENDACITAS>
+
+@{
+	ViewBag.Title = "Index";
+	if (Convert.ToInt32(Session["rol"]) == 1)
+	{
+		Layout = "~/Views/Shared/_Layout.cshtml";
+	}
+	else
+	{
+		Layout = "~/Views/Shared/_Layout2.cshtml";
+	}
+}
+<!-- Modal cambiar estado de cita -->
+<div id="miModal" class="modal fade" role="dialog">
+	<div class="modal-dialog">
+		<!-- Contenido del modal -->
+		<div class="modal-content">
+			<div class="modal-header">
+				
+				<h3 class="modal-title" id="miModal">INFORMACION DEL PACIENTE</h3>
+				
+			</div>
+			<div class="modal-body">
+				<div class="row">
+					<div class="col-md-6">
+						<label>N° Documento</label>
+						<p id="documento"></p>
+					</div>
+					<div class="col-md-6">
+						<label>Nombre Paciente </label>
+						<p id="nombre"></p>
+					</div>
+					
+				</div>
+				<div class="row">
+					<div class="col-md-12">
+						<label>OBSERVACIONES: </label>
+						<p id="obser"></p>
+					</div>
+				</div>
+				<div class="row">
+				@if (Convert.ToInt32(Session["rol"]) ==1) {
+					<input type="button" class="btn btn-warning" id="sala" value="SALA DE ESPERA" />
+				}
+					<input type="button" class="btn btn-success" id="atendido" value="ATENDIDO" />
+					<input type="button" class="btn btn-danger" id="no_atendido" value="NO ATENDIDO" />
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="container" style="width:70%;background-color:white;border-radius:50px">
+	<br />
+	<div class="card">
+		<div class="card-header" style="text-align:center;background-color:#3498DB ;color:white;border-radius:20px;"> <h3>@ViewBag.PROFESIONALN</h3></div>
+		<div class="card-body">
+			<hr />
+			<div id='calendar'></div>
+		</div>
+	</div>
+	<br />
+	<br />
+</div>
+
+@section scripts
+{
+	<script>
+		var profesional = @ViewBag.PROFESIONAL;
+
+		//jQuery llamamos funcion gettaskcalendad cuando cargue la pagina
+		$(function () {
+			getTasksCalendar(profesional);
+		});
+		function getTasksCalendar(profesional) {
+			$.get('/AGENDACITAS/GetIndex?profesional=' + profesional).
+				done(function (data) {
+					var isSuccesful = data.IsSuccesful;
+
+				if (isSuccesful) {
+					var events = [];
+					$.each(data.Data, function (idx, elemCita) {
+
+						events.push(
+							{
+								'id': elemCita.Id,
+								'title': elemCita.Title,
+								'start': elemCita.Start,
+								'allDay': elemCita.AllDay,
+								'color': elemCita.Color,
+								'textColor': elemCita.TextColor,
+							});
+					});
+					console.log(events);
+					var calendarEl = document.getElementById('calendar');
+
+					var calendar = new FullCalendar.Calendar(calendarEl, {
+						plugins: ['interaction', 'dayGrid'],
+
+						locale: 'es',
+						monthNames: ['ENERO', 'FEBRERO', 'MARZO', 'ABRIL', 'MAYO', 'JUNIO', 'JULIO', 'AGOSTO', 'SEPTIEMBRE', 'OCTUBRE', 'NOVIEMBRE', 'DICIEMBRE'],
+						monthNamesShort: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'],
+						dayNames: ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'],
+						dayNamesShort: ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'],
+						header: {
+							left: 'prevYear,prev,next,nextYear today',
+							center: 'title',
+							right: 'dayGridMonth,dayGridWeek,dayGridDay'
+						},
+						navLinks: true,
+						eventLimit: true,
+						eventClick: function (eventObj) {
+							let documento = eventObj.event.id;
+							let nombre = eventObj.event.title;
+							let fe = moment(eventObj.event.start).format('YYYY-MM-DD')+" 00:00:00";
+							let hr = moment(eventObj.event.start).format('HH:mm:ss');
+							$('#documento').html(documento);
+							$('#nombre').html(nombre);
+							$("#miModal").modal("show"); // llamamos al modal paracambiar estado de cita
+							//********** EXTRAER OBSERVACIONES***********//
+							$(function () {
+							var url = "@Url.Action("GetObserv", "AGENDACITAS")";
+								var data = { fecha:fe,hora:hr,documento:documento};
+
+									$.post(url, data).done(function (data) {
+										$("#obser").html(data);
+									
+								}).fail(manejarErrorAjax).always(function () {
+									//esta funcion siempreseejecuta
+								});
+							function manejarErrorAjax(err) {
+									console.log(err.responseText);
+								}
+							});
+							//********** FIN EXTRAER OBSERVACIONES***********//
+
+							// metodos para cambiar de estado al evento si esta en sala si fue atendido o no fue atendido.
+							//****************** en sala de espera
+							$(function () {
+								$("#sala").click(function ()
+							{
+								var url = "@Url.Action("cambioEstado", "AGENDACITAS")";
+								var data = { fecha:fe,hora:hr,documento:documento,estado:2};
+
+									$.post(url, data).done(function (data) {
+									alert("PACIENTE EN SALA DE ESPERA");
+									location.reload();
+								}).fail(manejarErrorAjax).always(function () {
+									//esta funcion siempreseejecuta
+								});
+							});
+							function manejarErrorAjax(err) {
+								console.log(err.responseText);
+							}
+							});
+
+							//****************** atendido
+							$(function () {
+								$("#atendido").click(function () {
+								var url = "@Url.Action("cambioEstado", "AGENDACITAS")";
+								var data = { fecha: fe, hora: hr, documento: documento, estado: 3 };
+
+									$.post(url, data).done(function (data) {
+									alert("PACIENTE ATENDIDO");
+									location.reload();
+									}).fail(manejarErrorAjax).always(function () {
+										//esta funcion siempreseejecuta
+									});
+								});
+							function manejarErrorAjax(err) {
+								console.log(err.responseText);
+							}
+							});
+
+
+							//****************** no atendido
+							$(function () {
+							$("#no_atendido").click(function () {
+									var url = "@Url.Action("cambioEstado", "AGENDACITAS")";
+									var data = { fecha:fe,hora:hr,documento:documento,estado:4};
+									$.post(url, data).done(function (data) {
+									alert("PACIENTE NO ATENDIDO");
+									location.reload();
+								}).fail(manejarErrorAjax).always(function () {
+										//esta funcion siempreseejecuta
+								});
+													});
+								function manejarErrorAjax(err) {
+									console.log(err.responseText);
+								}
+							});
+
+						},
+						events: events
+					});
+
+					calendar.render();
+
+				} else {
+					alert("error de cargas");
+				}
+			});
+		}
+
+	</script>
+}
+
+

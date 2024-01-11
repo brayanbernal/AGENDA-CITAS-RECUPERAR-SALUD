@@ -1,0 +1,428 @@
+﻿@model RECSALUD.Models.ViewModels.sesionesViewmodes
+
+@{
+	ViewBag.Title = "AGENDAR CITAS";
+}
+
+
+@using (Html.BeginForm("Create", "AGENDACITAS", FormMethod.Post, new { id = "formulario" }))
+{
+	@Html.AntiForgeryToken()
+
+	<div id="miModal" class="modal fade" role="dialog">
+		<div class="modal-dialog" style="width:1000px;">
+			<!-- Contenido del modal -->
+			<div class="modal-content">
+				<div class="modal-header">
+
+					<div class="row">
+						<div class="col-lg-5"><p id="numerosesiones" style="color:#112afa"></p></div>
+						<div class="col-lg-3"><button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button></div>
+					</div>
+
+				</div>
+				<div class="modal-body">
+					<div class="container" id='calendar' style="width:100%;"></div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+
+
+
+	<div class="container" style="width:100%;background-color:rgba(208, 211, 212, .8);border-radius:50px">
+		@Html.ValidationSummary(true, "", new { @class = "text-danger" })
+		<div class="card" style="width:99%;padding-left:20px">
+			<div class="card-header" style="text-align:center;background-color:#3498DB ;color:white;border-radius:20px"> <h3>DATOS DEL PACIENTE</h3></div>
+			<div class="card-body">
+				<div class="row">
+					<div class="col-md-4">
+						N° DOCUMENTO
+						@Html.EditorFor(model => model.documentop, new { htmlAttributes = new { @class = "form-control", @REQUIRED = "required" } })
+						@Html.ValidationMessageFor(model => model.documentop, "", new { @class = "text-danger" })
+					</div>
+					<div class="col-md-4">
+						TIPO DOCUMENTO
+						@Html.DropDownList("tipodoc", null, htmlAttributes: new { @class = "form-control", @ID = "tipodoc" })
+					</div>
+					<div class="col-md-4">
+						ENTIDAD
+						@Html.EditorFor(model => model.ent, new { htmlAttributes = new { @class = "form-control" } })
+
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-4">
+						NOMBRE
+						@Html.EditorFor(model => model.nombre, new { htmlAttributes = new { @class = "form-control", @ID = "nombre", @REQUIRED = "required" } })
+
+					</div>
+					<div class="col-md-4">
+						APELLIDO
+						@Html.EditorFor(model => model.apellido, new { htmlAttributes = new { @class = "form-control", @ID = "apellido", @REQUIRED = "required" } })
+					</div>
+					<div class="col-md-4">
+						DIRECCIÓN
+						@Html.EditorFor(model => model.dir, new { htmlAttributes = new { @class = "form-control", @ID = "dir", @REQUIRED = "required" } })
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-4">
+						CORREO ELECTRONICO
+						@Html.EditorFor(model => model.correo, new { htmlAttributes = new { @class = "form-control", @ID = "correo", @REQUIRED = "required" } })
+					</div>
+					<div class="col-md-4">
+						TEL1
+						@Html.EditorFor(model => model.tel1, new { htmlAttributes = new { @class = "form-control", @ID = "tel1", @REQUIRED = "required" } })
+					</div>
+					<div class="col-md-4">
+						TEL2
+						@Html.EditorFor(model => model.tel2, new { htmlAttributes = new { @class = "form-control", @ID = "tel2" } })
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-4">
+						SESIONES
+						@Html.EditorFor(model => model.sesiones, new { htmlAttributes = new { @class = "form-control", @ID = "sesiones", @REQUIRED = "required" } })
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="card" style="width:99%;padding-left:20px">
+			<div class="card-header" style="text-align:center;background-color:#3498DB ;color:white;border-radius:20px"> <h3>AGENDAR CITA</h3></div>
+			<div class="card-body">
+				<div class="row">
+
+					<div class="col-md-4">
+
+						PROFESIONAL DE SALUD
+						@Html.DropDownList("profesional", null, "--seleccione una opcion--", htmlAttributes: new { @class = "form-control", @ID = "profesional", @REQUIRED = "required" })
+					</div>
+					<div class="col-md-4">
+						OBSERVACIONES
+						<input type="text" id="ob" class="form-control" />
+					</div>
+					<div class="col-md-4">
+						<br />
+						@*<input type="button" onclick="Agregar();" value="AGREGAR" class="btn btn-warning" return false; />*@
+						<button type="button" class="btn btn-warning" data-toggle="modal" data-target="#miModal" id="modalcita">
+							AGREGAR CITA
+						</button>
+					</div>
+				</div>
+				<br />
+				<div class="row">
+					<div class="col-md-4">
+					</div>
+					<div class="col-md-4">
+					</div>
+					<div class="col-md-4">
+						<input type="submit" id="env" value="GUARDAR CITAS" class="btn btn-primary" />
+					</div>
+				</div>
+				<br />
+				<div class="row" id="citas">
+					<h4 style="text-align:center">TABLA DE CITAS</h4>
+					<div style="padding-left:250px;">
+						<table id="tablacitas" style="width:70%;" class="table table-striped">
+							<thead>
+								<tr style="background-color:#34495E;color:white;">
+									<th style="text-align:center">FECHA</th>
+									<th style="text-align:center">HORA</th>
+									<th style="text-align:center">PROFESIONAL</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td></td>
+									<td></td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
+		<br />
+		<br />
+		<div style="padding-left:150px;">
+
+		</div>
+		<br />
+		<br />
+	</div>
+}
+@section scripts
+	{
+	<script>
+		var num = 0;
+		
+		//----------------------------------------FULL CALENDAR PARA AGREGAR LAS CITAS
+
+		$(document).ready(function () {
+			$("#modalcita").click(function () {
+				agendarcitas();
+			});
+		});
+
+		var calendar;
+
+		function agendarcitas()
+		{
+
+
+			var events = [];
+
+			$.getJSON('/AGENDACITAS/GetHoras', {profesional: $('#profesional').val() }).
+				done(function (data) {
+					var events = [];
+								$.each(data.Data, function (idx, elemCita) {
+									events.push({
+										"id": elemCita.Id+"",
+										"title": elemCita.Title+"",
+										"start": elemCita.Start+"",
+										"allDay": elemCita.AllDay+"",
+										"color": "#ABB2B9",
+										"textColor": elemCita.TextColor+"",
+									});
+					});// fin del each
+					console.log(events);
+
+					var calendarEl = document.getElementById('calendar');
+					if (calendar) {
+						calendar.destroy();
+					} else {
+						calendar = new FullCalendar.Calendar(calendarEl, {
+
+							plugins: ['interaction', 'dayGrid'],
+
+							locale: 'es',
+							monthNames: ['ENERO', 'FEBRERO', 'MARZO', 'ABRIL', 'MAYO', 'JUNIO', 'JULIO', 'AGOSTO', 'SEPTIEMBRE', 'OCTUBRE', 'NOVIEMBRE', 'DICIEMBRE'],
+							monthNamesShort: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'],
+							dayNames: ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'],
+							dayNamesShort: ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'],
+							header: {
+								left: 'prevYear,prev,next,nextYear today',
+								center: 'title',
+								right: 'dayGridMonth'
+							},
+							navLinks: false,
+							//navLinkDayClick: function (date, jsEvent) {
+							//	alert('day', date.toISOString());
+							//	//console.log('coords', jsEvent.pageX, jsEvent.pageY);
+							//},
+							eventLimit: false,
+							eventClick: function (eventObj) {
+								//let documento = eventObj.event.id;
+								//let nombre = eventObj.event.title;
+								//let fe = moment(eventObj.event.start).format('YYYY-MM-DD') + " 00:00:00";
+								//let hr = moment(eventObj.event.start).format('HH:mm:ss');
+
+								var rep = 0;
+								let profesional = document.getElementById("profesional").value;
+								let profesionalText = $('#profesional option:selected').text();
+								let obser = document.getElementById("ob").value;
+								let feci = moment(eventObj.event.start).format('YYYY-MM-DD') + " 00:00:00";
+								let fecitext = moment(eventObj.event.start).format('YYYY-MM-DD');
+								let hoci = eventObj.event.id;
+								let hocitext = eventObj.event.title;
+								let tabla = document.getElementById("tablacitas");
+								let numses = document.getElementById("sesiones").value;
+								console.log(numses);
+								if (numses <= 0) {
+									alert("SESIONES DEBEN SER MAYORES A 0");
+								} else {
+									if (num == numses) {
+										alert("NUMERO DE CITAS ALCANZADAS");
+									} else {
+										//metodo for para recorrer tabla de registros no dejar guardar si esta repetido
+										let tabla1 = document.getElementById("tablacitas");
+										var numtabla = document.getElementById('tablacitas').getElementsByTagName('tr').length - 1; // conteo de filas en la tabla
+									
+
+										for (let i = 0; i <= numtabla; i++) {
+
+											if (fecitext == tabla1.rows[i].cells[0].innerHTML && hocitext == tabla1.rows[i].cells[1].innerHTML) {
+												rep = 1;
+											}
+										}
+										if (rep == 1) {
+											rep = 0;
+											alert("PACIENTE NO PUEDE TENER DOS CITAS A LA MISMA HORA");
+										}
+										else {
+											if (document.getElementById("profesional").value == null || document.getElementById("profesional").value == "") {
+												alert("PROFESIONAL DE SALUD NO SELECCIONADO");
+											} else {
+												// propiedades de la tabla
+												let TR = document.createElement("tr");
+												let TDfecha = document.createElement("td");
+												let TDhora = document.createElement("td");
+												let TDprofesional = document.createElement("td");
+												TR.appendChild(TDfecha);
+												TR.appendChild(TDhora);
+												TR.appendChild(TDprofesional);
+												//agregamos el texto a la tabla
+												TDfecha.innerHTML = fecitext;
+												TDhora.innerHTML = hocitext;
+												TDprofesional.innerHTML = profesionalText;
+												tabla.appendChild(TR);
+												// agrgamos los hidens los que se enviaranpor post
+												let divcitas = document.getElementById("citas");
+
+												let HiddenIndex = document.createElement("input");
+												let HiddenProfe = document.createElement("input");
+												let HiddenObser = document.createElement("input");
+												let HiddenFecha = document.createElement("input");
+												let Hiddenhora = document.createElement("input");
+
+												HiddenIndex.name = "citas.Index";
+												HiddenIndex.value = num;
+												HiddenIndex.id = num;
+												HiddenIndex.type = "hidden";
+												HiddenFecha.name = "citas[" + num + "].fechacita";
+												HiddenFecha.id = "citas[" + num + "].fechacita";
+												HiddenFecha.value = feci;
+												HiddenFecha.type = "hidden";
+												Hiddenhora.name = "citas[" + num + "].horacita";
+												Hiddenhora.id = "citas[" + num + "].horacita";
+												Hiddenhora.value = hoci;
+												Hiddenhora.type = "hidden";
+												HiddenProfe.name = "citas[" + num + "].profesional";
+												HiddenProfe.id = "citas[" + num + "].profesional";
+												HiddenProfe.value = profesional;
+												HiddenProfe.type = "hidden";
+												HiddenObser.name = "citas[" + num + "].observaciones";
+												HiddenObser.id = "citas[" + num + "].observaciones";
+												HiddenObser.value = obser;
+												HiddenObser.type = "hidden";
+
+												// AGREGAMOS LOS HIDDEN AL DIV CITAS
+												divcitas.appendChild(HiddenIndex);
+												divcitas.appendChild(HiddenFecha);
+												divcitas.appendChild(Hiddenhora);
+												divcitas.appendChild(HiddenProfe);
+												divcitas.appendChild(HiddenObser);
+
+												num++; // aumenta contador
+
+												if (numses == num) {
+													$("#env").show();
+												}
+												$("#sesiones").attr("readonly", "readonly");
+												var event = eventObj.event
+												event.setProp('backgroundColor', 'red');												
+												calendar.updateEvent(event);
+												$("#numerosesiones").html("numero de citas seleccionadas" + num);
+											}
+										}
+									}
+								}
+
+							},
+							events: events
+						});
+					}
+
+					calendar.render();
+
+				});//hasta aqui el get
+		}// fin de la funcion
+
+//---------------------------------------- FIN FULL CALENDAR
+
+		$("#env").hide();
+		$("#modalcita").hide();
+	
+	//************* EXTRAER DATOS PACIENTE****************//
+
+		$(function () {
+			$("#documentop").change(function () {
+
+				var url = "@Url.Content("~/AGENDACITAS/getpaciente")";
+				var paciente = $("#documentop").val();
+				var data = { documento: paciente };
+				$.post(url, data).done(function (res) {
+					if (res == "") {
+						alert("USUARIO NO REGISTRADO ANTERIORMENTE ASEGURESE DE COMPLETAR TODOS LOS CAMPOS")
+						document.getElementById("ent").value ="";
+						document.getElementById("nombre").value = "";
+						document.getElementById("apellido").value = "";
+						document.getElementById("dir").value ="";
+						document.getElementById("tel1").value = "";
+						document.getElementById("tel2").value = "";
+						document.getElementById("sesiones").value = "";
+						document.getElementById("correo").value = "";
+					} else {
+						if (res.ses > 0) {
+							alert("PACIENTE CON --" + res.ses + "-- SESIONES PENDIENTES");
+							document.getElementById("documentop").value = "";
+						} else {
+							alert("USUARIO  REGISTRADO ANTERIORMENTE AGENDE CITA (CUALQUIER CAMBIO EN LOS DATOS DEL PACIENTE NO SERAN GUARDADOS)")
+
+					// COLOCACION DE DATOS PACIENTE EN CADA CAMPO.
+							document.getElementById("tipodoc").value = res.tipodoc;
+							document.getElementById("ent").value = res.ent;
+							document.getElementById("nombre").value = res.nombre;
+							document.getElementById("apellido").value = res.apellido;
+							document.getElementById("dir").value = res.dir;
+							document.getElementById("tel1").value = res.tel1;
+							document.getElementById("tel2").value = res.tel2;
+							document.getElementById("sesiones").value = res.ses;
+							document.getElementById("correo").value = res.correo;
+							// BLOQUEO DE CAMPOS AL ENCONTRAR PACIENTE REGISTRADO
+							$("#tipodoc").attr("readonly", "readonly");
+							$("#ent").attr("readonly", "readonly");
+							$("#nombre").attr("readonly", "readonly");
+							$("#apellido").attr("readonly", "readonly");
+							$("#dir").attr("readonly", "readonly");
+							$("#tel1").attr("readonly", "readonly");
+							$("#tel2").attr("readonly", "readonly");
+							$("#correo").attr("readonly", "readonly");
+
+						}
+					}
+
+				}).fail(manejarErrorAjax).always(function () {
+					//esta funcion siempreseejecuta
+
+				});
+			});
+			function manejarErrorAjax(err) {
+				console.log(err.responseText);
+
+			}
+			});
+	//************* FIN EXTRAER DATOS PACIENTE****************//
+
+
+		$(document).ready(function () {
+			$("#profesional").change(function () {
+
+				if ($('#profesional').val != null || $('#profesional').val != " ") {
+					$("#modalcita").show();
+				} else {
+					$("#modalcita").hide();
+				}
+			});
+		});
+
+		// VALIDARFORMULARIO NO CAMPOSINCORRECTOS
+		function validarFormulario(evento) {
+			evento.preventDefault();
+			if (document.getElementById("sesiones").value < num + 1) {
+				alert("TCITAS AGENADAS MENOR A SESIONES DEL PACIENTE");
+			}
+			else {
+				this.submit();
+			}
+
+		}
+	</script>
+}

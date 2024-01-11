@@ -1,0 +1,129 @@
+﻿@model RECSALUD.Models.USUARIOS
+
+@{
+	ViewBag.Title = "AGREGAR PROFESIONAL DE SALUD";
+	Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+@using (Html.BeginForm("Create", "USUARIOS", FormMethod.Post, new { id = "formulario" }))
+{
+	@Html.AntiForgeryToken()
+	<br /><br />
+	<div class="container" style="width:100%;background-color:rgba(208, 211, 212, .8);border-radius:50px">
+		<div class="card">
+			<div class="card-header" style="text-align:center;background-color:#566573;color:white;border-radius:20px">
+				<h3>AGREGAR PROFESIONAL DE SALUD</h3>
+			</div>
+			<div class="card-body">
+				<br />
+				<div class="row">
+					<div class="col-md-4">
+						DOCUMENTO:
+						@Html.EditorFor(model => model.documento, new { htmlAttributes = new { @class = "form-control", @ID = "documento", @REQUIRED = "required" } })
+						@Html.ValidationMessageFor(model => model.documento, "", new { @class = "text-danger" })
+					</div>
+					<div class="col-md-4">
+						NOMBRES:
+						@Html.EditorFor(model => model.nombres, new { htmlAttributes = new { @class = "form-control", @REQUIRED = "required" } })
+						@Html.ValidationMessageFor(model => model.nombres, "", new { @class = "text-danger" })
+					</div>
+					<div class="col-md-4">
+						APELLIDOS:
+						@Html.EditorFor(model => model.apellidos, new { htmlAttributes = new { @class = "form-control", @REQUIRED = "required" } })
+						@Html.ValidationMessageFor(model => model.apellidos, "", new { @class = "text-danger" })
+					</div>
+				</div>
+				<br />
+				<div class="row">
+					<div class="col-md-4">
+						PROFESION:
+						@Html.DropDownList("profesion", null, htmlAttributes: new { @class = "form-control", @REQUIRED = "required" })
+						@Html.ValidationMessageFor(model => model.profesion, "", new { @class = "text-danger" })
+					</div>
+					<div class="col-md-4">
+						ROL:
+						@Html.DropDownList("rol", null, htmlAttributes: new { @class = "form-control", @REQUIRED = "required" })
+						@Html.ValidationMessageFor(model => model.rol, "", new { @class = "text-danger" })
+					</div>
+					<div class="col-md-4">
+						PACIENTES SIMULTANEOS:
+						@Html.EditorFor(model => model.simultnaneos, new { htmlAttributes = new { @class = "form-control", @ID="simultaneos" ,@REQUIRED = "required" } })
+						@Html.ValidationMessageFor(model => model.simultnaneos, "", new { @class = "text-danger" })
+					</div>
+				</div>
+				<br />
+				<div class="row">
+					<div class="col-md-4">
+						CORREO:
+						@Html.EditorFor(model => model.correo, new { htmlAttributes = new { @class = "form-control", @REQUIRED = "required" } })
+						@Html.ValidationMessageFor(model => model.correo, "", new { @class = "text-danger" })
+					</div>
+					<div class="col-md-4">
+						CONTRASEÑA PARA ACCESO:
+						@Html.EditorFor(model => model.contrasena, new { htmlAttributes = new { @class = "form-control", @REQUIRED = "required" } })
+						@Html.ValidationMessageFor(model => model.contrasena, "", new { @class = "text-danger" })
+					</div>
+					<div class="col-md-4">
+
+					</div>
+				</div>
+				<br />
+				<div class="row">
+					<div class="col-md-4"></div>
+					<div class="col-md-4"><input type="submit" value="GUARDAR" class="btn btn-primary" /> &nbsp;&nbsp;&nbsp; @Html.ActionLink("Back to List", "Index")</div>
+					<div class="col-md-4"></div>
+				</div>
+			</div>
+		</div>
+		<br />
+		<br />
+		<br />
+	</div>
+}
+@section scripts
+{
+	<script>
+
+	//************* EXTRAER DATOS PACIENTE****************//
+
+		$(function () {
+			$("#documento").change(function ()
+			{
+				var url = "@Url.Content("~/USUARIOS/GetUsuario")";
+				var usuario = $("#documento").val();
+				var data = { documento: usuario };
+				$.post(url, data).done(function (res)
+				{
+					if (res != "") {
+						alert("PROFESIONAL REGISTRADO ANTERIORMENTE");
+						document.getElementById("documento").value = "";
+					}
+				
+
+			}).fail(manejarErrorAjax).always(function ()
+				{
+					//esta funcion siempreseejecuta
+
+				});
+			});
+			function manejarErrorAjax(err) {
+				console.log(err.responseText);
+
+			}
+		});
+
+
+		// VALIDARFORMULARIO NO CAMPOSINCORRECTOS
+		function validarFormulario(evento) {
+			evento.preventDefault();
+			if (document.getElementById("simultaneos").value <= 0 || document.getElementById("simultaneos").value == null || document.getElementById("simultaneos").value <= "") {
+				alert("atenciones simultaneas debe ser mayo a 0 (cero)");
+			} else {
+				this.submit();
+			}
+			
+		}
+
+	</script>
+}

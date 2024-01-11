@@ -1,0 +1,202 @@
+﻿@model IEnumerable<RECSALUD.Models.AGENDACITAS>
+
+@{
+	ViewBag.Title = "TODAS LAS CITAS";
+	Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container" style="width:100%;background-color:rgba(208, 211, 212, .8);border-radius:50px">
+	<div class="card">
+		<div class="card-header" style="text-align:center;background-color:#566573;color:white;border-radius:20px;"> <h3>CITAS</h3></div>
+		<div class="card-body">
+			<table id="myTable" class="table table-striped">
+				<thead>
+					<tr style="background-color:#6367b0;color:white">
+						<th>
+							DOCUMENTO
+						</th>
+						<th>
+							NOMBRE Y APELLIDO
+						</th>
+						<th>
+							FECHA CITA
+						</th>
+						<th>
+							HORA
+						</th>
+						<th>
+							PROFESIONAL
+						</th>
+						<th>
+							OBSERVACIONES
+						</th>
+						<th>
+							ESTADO
+						</th>
+						
+						<th>OPCIONES</th>
+					</tr>
+				</thead>
+				<tbody>
+					@foreach (var item in Model)
+					{
+						if (item.estado == 1)
+						{
+							<tr style="color:#3498DB">
+								<td>
+									@Html.DisplayFor(modelItem => item.documentop)
+								</td>
+								<td>
+									@Html.DisplayFor(modelItem => item.DATOSPACIENTE.nombre) &nbsp; @Html.DisplayFor(modelItem => item.DATOSPACIENTE.apellido)
+								</td>
+
+								<td>
+									@Html.DisplayFor(modelItem => item.fechacita)
+								</td>
+								<td>
+									@Html.DisplayFor(modelItem => item.HORASATENCION.hora)
+								</td>
+								<td>
+									@Html.DisplayFor(modelItem => item.USUARIOS.nombres)&nbsp;@Html.DisplayFor(modelItem => item.USUARIOS.apellidos)
+								</td>
+								<td>
+									@Html.DisplayFor(modelItem => item.observaciones)
+								</td>
+								<td>
+									@Html.DisplayFor(modelItem => item.ESTADOSPACIENTECITA.estado)
+								</td>
+								<td>
+									<a id="editar" class="btn btn-inline btn-xs btn-primary" href="/AGENDACITAS/Edit?id=@item.id" title="Editar">
+										<i class="fa fa-pencil-square" aria-hidden="true"></i>
+									</a>
+									<a id="eliminar" class="btn btn-inline btn-xs btn-danger" href="/AGENDACITAS/Delete?id=@item.id" title="ELIMINAR">
+										<i class="fa fa-trash" aria-hidden="true"></i>
+									</a>
+								</td>
+							</tr>
+						}
+						if (item.estado == 2)
+						{
+							<tr style="color:#F39C12">
+								<td>
+									@Html.DisplayFor(modelItem => item.documentop)
+								</td>
+								<td>
+									@Html.DisplayFor(modelItem => item.DATOSPACIENTE.nombre) &nbsp; @Html.DisplayFor(modelItem => item.DATOSPACIENTE.apellido)
+								</td>
+
+								<td>
+									@Html.DisplayFor(modelItem => item.fechacita)
+								</td>
+								<td>
+									@Html.DisplayFor(modelItem => item.HORASATENCION.hora)
+								</td>
+								<td>
+									@Html.DisplayFor(modelItem => item.USUARIOS.nombres)&nbsp;@Html.DisplayFor(modelItem => item.USUARIOS.apellidos)
+								</td>
+								<td>
+									@Html.DisplayFor(modelItem => item.observaciones)
+								</td>
+								<td>
+									@Html.DisplayFor(modelItem => item.ESTADOSPACIENTECITA.estado)
+								</td>
+								<td>
+									<a id="editar" class="btn btn-inline btn-xs btn-primary" href="/AGENDACITAS/Edit?id=@item.id" title="Editar">
+										<i class="fa fa-pencil-square" aria-hidden="true"></i>
+									</a>
+									<a id="eliminar" class="btn btn-inline btn-xs btn-danger" href="/AGENDACITAS/Delete?id=@item.id" title="ELIMINAR">
+										<i class="fa fa-trash" aria-hidden="true"></i>
+									</a>
+								</td>
+							</tr>
+						}
+						if (item.estado == 3)
+						{
+							<tr style="color:#48C9B0 ">
+								<td>
+									@Html.DisplayFor(modelItem => item.documentop)
+								</td>
+								<td>
+									@Html.DisplayFor(modelItem => item.DATOSPACIENTE.nombre) &nbsp; @Html.DisplayFor(modelItem => item.DATOSPACIENTE.apellido)
+								</td>
+
+								<td>
+									@Html.DisplayFor(modelItem => item.fechacita)
+								</td>
+								<td>
+									@Html.DisplayFor(modelItem => item.HORASATENCION.hora)
+								</td>
+								<td>
+									@Html.DisplayFor(modelItem => item.USUARIOS.nombres)&nbsp;@Html.DisplayFor(modelItem => item.USUARIOS.apellidos)
+								</td>
+								<td>
+									@Html.DisplayFor(modelItem => item.observaciones)
+								</td>
+								<td>
+									@Html.DisplayFor(modelItem => item.ESTADOSPACIENTECITA.estado)
+								</td>
+								<td>
+									<a id="editar" class="btn btn-inline btn-xs btn-primary" href="/AGENDACITAS/Edit?id=@item.id" title="Editar">
+										<i class="fa fa-pencil-square" aria-hidden="true"></i>
+									</a>
+									<a id="eliminar" class="btn btn-inline btn-xs btn-danger" href="/AGENDACITAS/Delete?id=@item.id" title="ELIMINAR">
+										<i class="fa fa-trash" aria-hidden="true"></i>
+									</a>
+								</td>
+							</tr>
+						}
+						if (item.estado == 4)
+						{
+							<tr style="color:#E74C3C ">
+								<td>
+									@Html.DisplayFor(modelItem => item.documentop)
+								</td>
+								<td>
+									@Html.DisplayFor(modelItem => item.DATOSPACIENTE.nombre) &nbsp; @Html.DisplayFor(modelItem => item.DATOSPACIENTE.apellido)
+								</td>
+
+								<td>
+									@Html.DisplayFor(modelItem => item.fechacita)
+								</td>
+								<td>
+									@Html.DisplayFor(modelItem => item.HORASATENCION.hora)
+								</td>
+								<td>
+									@Html.DisplayFor(modelItem => item.USUARIOS.nombres)&nbsp;@Html.DisplayFor(modelItem => item.USUARIOS.apellidos)
+								</td>
+								<td>
+									@Html.DisplayFor(modelItem => item.observaciones)
+								</td>
+								<td>
+									@Html.DisplayFor(modelItem => item.ESTADOSPACIENTECITA.estado)
+								</td>
+								<td>
+									<a id="editar" class="btn btn-inline btn-xs btn-primary" href="/AGENDACITAS/Edit?id=@item.id" title="Editar">
+										<i class="fa fa-pencil-square" aria-hidden="true"></i>
+									</a>
+									<a id="eliminar" class="btn btn-inline btn-xs btn-danger" href="/AGENDACITAS/Delete?id=@item.id" title="ELIMINAR">
+										<i class="fa fa-trash" aria-hidden="true"></i>
+									</a>
+								</td>
+							</tr>
+						}
+
+					}
+				</tbody>
+			</table>
+		</div>
+	</div>
+	<br />
+	<br />
+	<br />
+</div>
+
+
+
+
+@section scripts
+{
+
+}
+
+

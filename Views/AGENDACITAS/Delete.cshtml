@@ -1,0 +1,79 @@
+﻿@model RECSALUD.Models.AGENDACITAS
+
+@{
+    ViewBag.Title = "Delete";
+}
+<br />
+<br />
+<div class="container" style="width:50%;background-color:rgba(208, 211, 212, .8);border-radius:50px">
+	
+	<h2 style="text-align:center">ELIMINAR CITA</h2>
+
+	<h3 style="text-align:center">ESTA SEGURO DE ELIMINAR CITA?</h3>
+
+
+	<hr />
+	<dl class="dl-horizontal">
+		<dt>
+			FECHA CITA:
+		</dt>
+
+		<dd>
+			@Html.DisplayFor(model => model.fechacita)
+		</dd>
+		<dt>
+			HORA CITA:
+		</dt>
+
+		<dd>
+			@Html.DisplayFor(model => model.HORASATENCION.hora)
+		</dd>
+		<dt>
+			NOMBRE PACIENTE
+		</dt>
+
+		<dd>
+			@Html.DisplayFor(model => model.DATOSPACIENTE.nombre) &nbsp; @Html.DisplayFor(model => model.DATOSPACIENTE.apellido)
+		</dd>
+
+		<dt>
+			OBSERVACIONES:
+		</dt>
+
+		<dd>
+			@Html.DisplayFor(model => model.observaciones)
+		</dd>
+
+
+		<dt>
+			@Html.DisplayNameFor(model => model.ESTADOSPACIENTECITA.estado)
+		</dt>
+
+		<dd>
+			@Html.DisplayFor(model => model.ESTADOSPACIENTECITA.estado)
+		</dd>
+
+
+		<dt>
+			@Html.DisplayNameFor(model => model.USUARIOS.nombres)
+		</dt>
+
+		<dd>
+			@Html.DisplayFor(model => model.USUARIOS.nombres)
+		</dd>
+
+	</dl>
+
+	@using (Html.BeginForm())
+	{
+		@Html.AntiForgeryToken()
+
+		<div class="form-actions no-color">
+			<input type="submit" value="ELIMINAR" class="btn btn-danger" /> |
+			@Html.ActionLink("Back to List", "Index2")
+		</div>
+	}
+	<br />
+	<br />
+	<br />
+</div>

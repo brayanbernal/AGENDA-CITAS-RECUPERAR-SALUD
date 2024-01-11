@@ -1,0 +1,103 @@
+﻿@model IEnumerable<RECSALUD.Models.USUARIOS>
+
+@{
+	ViewBag.Title = "DATOS USUARIOS Y PROFESIONALES";
+}
+<br />
+<br />
+<div class="container" style="width:100%;background-color:rgba(208, 211, 212, .8);border-radius:50px">
+	<div class="card">
+		<div class="card-header" style="text-align:center;background-color:#566573;color:white;border-radius:20px">
+		<h3>AGENDAS</h3>
+			
+		</div>
+		<div class="card-body">
+			<table id="myTable" class="table table-striped">
+				<thead>
+					<tr style="background-color:#6367b0;color:white">
+						<th>
+							DOCUMENTO
+						</th>
+						<th>
+							NOMBRE Y APELLIDO
+						</th>
+						<th>
+							CORREO
+						</th>
+						<th>
+							CONTRASEÑA
+						</th>
+						<th>
+							PROFESION
+						</th>
+						<th>
+							ROL
+						</th>
+
+						<th><a class="btn btn-inline btn-sm btn-info" href="/AGENDACITAS/Index2">
+	<i class="fa fa-address-book" aria-hidden="true">TODAS LAS CITAS</i>
+</a></th>
+					</tr>
+				</thead>
+				<tbody>
+					@foreach (var item in Model)
+					{
+						if (item.documento!=123)
+						{
+							<tr>
+								<td>
+									@Html.DisplayFor(modelItem => item.documento)
+								</td>
+								<td>
+									@Html.DisplayFor(modelItem => item.nombres) &nbsp; @Html.DisplayFor(modelItem => item.apellidos)
+								</td>
+								<td>
+									@Html.DisplayFor(modelItem => item.correo)
+								</td>
+								<td>
+									@Html.DisplayFor(modelItem => item.contrasena)
+								</td>
+								<td>
+									@Html.DisplayFor(modelItem => item.PROFESIONES.profesion)
+								</td>
+								<td>
+									@Html.DisplayFor(modelItem => item.ROLES.rol)
+								</td>
+								<td>
+									@if (item.profesion!=1)
+									{
+										<a id="agenda" class="btn btn-inline btn-sm btn-primary" href="/AGENDACITAS/Index?profesional=@item.documento" title="AGENDA">
+											<i class="fa fa-address-book" aria-hidden="true"></i>
+										</a> 
+									}
+									
+								</td>
+							</tr> 
+						}
+					}
+				</tbody>
+			</table>
+		</div>
+	</div>
+	<br />
+	<br />
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
