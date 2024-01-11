@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="7ecec977a3644c6e8dfe28094bfc0f8f" Name="Diagram1" ZoomLevel="80">
+        <EntityTypeShape EntityType="RECSALUDModel.PROFESIONES" Width="1.5" PointX="0.75" PointY="1.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="RECSALUDModel.ROLES" Width="1.5" PointX="0.75" PointY="5.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="RECSALUDModel.USUARIOS" Width="1.5" PointX="3" PointY="1" IsExpanded="true" />
+        <AssociationConnector Association="RECSALUDModel.FK_USUARIOS_PROFESIONES" ManuallyRouted="false" />
+        <AssociationConnector Association="RECSALUDModel.FK_USUARIOS_ROLES" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="RECSALUDModel.AGENDACITAS" Width="1.5" PointX="6.625" PointY="1.125" />
+        <EntityTypeShape EntityType="RECSALUDModel.DATOSPACIENTE" Width="1.5" PointX="9.25" PointY="1" />
+        <EntityTypeShape EntityType="RECSALUDModel.HORASATENCION" Width="1.5" PointX="4.625" PointY="5.5" />
+        <EntityTypeShape EntityType="RECSALUDModel.TIPO_DOCUMENTO" Width="1.5" PointX="11.375" PointY="1.5" />
+        <AssociationConnector Association="RECSALUDModel.FK_AGENDACITAS_DATOSPACIENTE" />
+        <AssociationConnector Association="RECSALUDModel.FK_AGENDACITAS_HORASATENCION" ManuallyRouted="true" >
+          <ConnectorPoint PointX="5.375" PointY="5.5" />
+          <ConnectorPoint PointX="5.375" PointY="3.1329516021002566" />
+          <ConnectorPoint PointX="6.625" PointY="3.1329516021002566" />
+        </AssociationConnector>
+        <AssociationConnector Association="RECSALUDModel.FK_AGENDACITAS_USUARIOS" />
+        <AssociationConnector Association="RECSALUDModel.FK_DATOSPACIENTE_TIPO_DOCUMENTO" />
+        <EntityTypeShape EntityType="RECSALUDModel.ESTADOSPACIENTECITA" Width="1.5" PointX="7.375" PointY="5.875" />
+        <AssociationConnector Association="RECSALUDModel.FK_AGENDACITAS_ESTADOSPACIENTECITA" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>
